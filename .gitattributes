@@ -1,0 +1,22 @@
+/mvnw text eol=lf
+*.cmd text eol=crlf
+
+
+# Normalisation des fins de ligne pour tous les fichiers texte
+* text=auto
+
+# Fins de ligne LF pour les fichiers source du backend et frontend
+*.java text eol=lf
+*.js text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.xml text eol=lf
+
+# Fichiers binaires (pas de comparaison ligne par ligne)
+*.jpg binary
+*.png binary
+*.gif binary
+*.pdf binary
+
+# Ignorer certains fichiers sensibles comme .env
+*.env text eol=lf
