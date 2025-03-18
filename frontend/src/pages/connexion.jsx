@@ -1,111 +1,116 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// import Swal from 'sweetalert2'; // Assurez-vous d'installer sweetalert2 pour les alertes
 
 function LoginPage() {
     const navigate = useNavigate();
-    const usernameRef = useRef(null);
-    const passwordRef = useRef(null);
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const matriculeRef = useRef(null);
+    const motdepasseRef = useRef(null);
+    const [matricule, setMatricule] = useState("");
+    const [motdepasse, setMotdepasse] = useState("");
     const [role, setRole] = useState("");
     const [error, setError] = useState("");
 
     const handleClick = () => {
-        navigate('/');
+        navigate('/'); // Retour
     };
 
     const handleLogin = (e) => {
         e.preventDefault();
-        
-        // Validation
+    
+        // Vérifications côté frontend
         if (!role.trim()) {
             setError("Veuillez sélectionner un rôle");
-            // alert("Erreur : Veuillez sélectionner un rôle (Admin/Technicien/Utilisateur)");
-
-            Swal.fire({
-                icon: "error",
-                title: "verifier les champs",
-                text: "Veuillez sélectionner un rôle (Admin/Technicien/Utilisateur)",
-                footer: '<a href="#">Why do I have this issue?</a>'
-              });
             return;
         }
-
-        if (!username.trim()) {
+        if (!matricule.trim()) {
             setError("Veuillez entrer votre matricule");
-            // alert("Erreur : Le matricule est requis");
-            usernameRef.current.focus();
-            Swal.fire({
-                icon: "error",
-                title: "verifier les champs",
-                text: "Le matricule est requis",
-                footer: '<a href="#">Why do I have this issue?</a>'
-              });
+            matriculeRef.current.focus();
             return;
         }
-
-        if (!password.trim()) {
+        if (!motdepasse.trim()) {
             setError("Veuillez entrer votre mot de passe");
-            // alert("Erreur : Le mot de passe est requis");
-            Swal.fire({
-                icon: "error",
-                title: "verifier les champs",
-                text: "Le mot de passe est requis",
-                footer: '<a href="#">Why do I have this issue?</a>'
-              });
-            passwordRef.current.focus();
+            motdepasseRef.current.focus();
             return;
         }
-
-        if (password.length < 6) {
+        if (motdepasse.length < 6) {
             setError("Le mot de passe doit contenir au moins 6 caractères");
-            // alert("Erreur : Le mot de passe doit contenir au moins 6 caractères");
-            Swal.fire({
-                icon: "error",
-                title: "verifier les champs",
-                text: "Le mot de passe doit contenir au moins 6 caractères",
-                footer: '<a href="#">Why do I have this issue?</a>'
-              });
-            passwordRef.current.focus();
+            motdepasseRef.current.focus();
             return;
         }
+    
+        const user = {
+            matricule: matricule,
+            motdepasse: motdepasse,
+            role: role
+        };
+    
+        console.log("Données envoyées au backend :", JSON.stringify(user));
+    
+        // Envoi des données au backend
+        fetch('http://localhost:8080/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json(); // Assurez-vous que la réponse est en JSON
+            })
+            .then(data => {
+                console.log("Réponse du backend :", data);
+                if (data.message === "Connexion réussie !") {
 
-        // Si toutes les validations passent
-        setError("");
-        console.log("Connexion effectuée avec:", {
-            role: role,
-            matricule: username,
-            motDePasse: password
-        });
-        
-        // alert("Connexion réussie !");
-        Swal.fire({
-            title: "Good job!",
-            text: "Connexion réussie !",
-            icon: "success"
-          });
-        // Ici vous pouvez ajouter la logique d'authentification réelle
-        // et la redirection appropriée après succès
-        // navigate('/dashbo');
+                    if (role == 'utilisateur'){navigate('/utilisateur');}
+                    if (role == 'technicien'){navigate('/technicien');}
+                    if (role == 'admin'){navigate('/admin');}
+                    // navigate('/admin');
+                    // Swal.fire({
+                    //     title: "Connexion réussie !",
+                    //     text: "Bienvenue à votre tableau de bord.",
+                    //     icon: "success"
+                    // }).then(() => {
+                    //     navigate('/admin');
+                    // });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Erreur de connexion",
+                        text: data.message || "Erreur inconnue",
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Erreur",
+                    text: "Une erreur est survenue : " + error.message,
+                });
+                console.error('Erreur lors de la connexion:', error);
+            });
     };
 
     return (
         <div className="flex h-screen bg-gray-900 text-white font-sans">
             <div className="flex flex-col justify-center p-12 ml-10 md:ml-20 lg:ml-32">
                 <h1 className="text-5xl font-bold text-blue-400 mb-4">Connexion</h1>
-                <p className="text-lg text-gray-300">Entrez votre pseudo et votre mot de passe</p>
+                <p className="text-lg text-gray-300">Entrez votre matricule et votre mot de passe</p>
             </div>
 
             <div className="flex-1 flex flex-col justify-center p-12 bg-gray-800">
                 <div className="mb-6 relative text-2xl">
-                    <span>Acceder a votre interface utilisateur</span>
+                    <span>Accéder à votre interface utilisateur</span>
                 </div>
                 <div>
                     <span className="text-[14px] text-[#ccc]">
                         Application de gestion d'incident IT
                     </span>
                 </div>
-                
+
                 {error && (
                     <div className="mb-4 text-red-500 text-sm">
                         {error}
@@ -131,10 +136,10 @@ function LoginPage() {
                     </label>
                     <input
                         type="text"
-                        ref={usernameRef}
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="matricule"
+                        ref={matriculeRef}
+                        value={matricule}
+                        onChange={(e) => setMatricule(e.target.value)}
+                        placeholder="Matricule"
                         className="w-full max-w-md p-2 bg-gray-700 hover:border-blue-400 border border-gray-600 rounded text-white"
                     />
                     <label className="block text-sm text-gray-400 mb-1">
@@ -142,9 +147,9 @@ function LoginPage() {
                     </label>
                     <input
                         type="password"
-                        ref={passwordRef}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        ref={motdepasseRef}
+                        value={motdepasse}
+                        onChange={(e) => setMotdepasse(e.target.value)}
                         placeholder="Mot de passe"
                         className="w-full max-w-md p-2 bg-gray-700 hover:border-blue-400 border border-gray-600 rounded text-white"
                     />
