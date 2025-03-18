@@ -68,14 +68,7 @@ function LoginPage() {
                     if (role == 'utilisateur'){navigate('/utilisateur');}
                     if (role == 'technicien'){navigate('/technicien');}
                     if (role == 'admin'){navigate('/admin');}
-                    // navigate('/admin');
-                    // Swal.fire({
-                    //     title: "Connexion réussie !",
-                    //     text: "Bienvenue à votre tableau de bord.",
-                    //     icon: "success"
-                    // }).then(() => {
-                    //     navigate('/admin');
-                    // });
+                   
                 } else {
                     Swal.fire({
                         icon: "error",

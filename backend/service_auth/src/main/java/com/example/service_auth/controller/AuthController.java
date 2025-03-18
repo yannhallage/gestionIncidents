@@ -22,7 +22,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody UserLoginRequest loginRequest) {
         logger.info("Tentative de connexion pour l'utilisateur : " + loginRequest.getMatricule());
 
-        // Vérification avec la méthode authenticate
+        // Appel de la méthode authenticate
         boolean isAuthenticated = userService.authenticate(
                 loginRequest.getMatricule(),
                 loginRequest.getMotdepasse(),
@@ -34,7 +34,6 @@ public class AuthController {
             return ResponseEntity.status(401).body(new MessageResponse("Matricule, mot de passe ou rôle incorrect"));
         }
 
-        // Authentification réussie
         logger.info("Connexion réussie pour l'utilisateur : " + loginRequest.getMatricule());
         return ResponseEntity.ok(new MessageResponse("Connexion réussie !"));
     }

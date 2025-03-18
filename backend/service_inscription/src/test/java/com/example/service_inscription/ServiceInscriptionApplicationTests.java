@@ -1,10 +1,10 @@
-package com.monprojet.microservice_inscription;
+package com.example.service_inscription;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MicroserviceInscriptionApplicationTests {
+class ServiceInscriptionApplicationTests {
 
 	@Test
 	void contextLoads() {
