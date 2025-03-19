@@ -11,24 +11,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean authenticate(String matricule, String motdepasse, String role) {
-        User user = userRepository.findByMatricule(matricule);
-
-        if (user == null) {
-            System.out.println("Utilisateur non trouvé pour le matricule : " + matricule);
-            return false;
+    public User authenticate(String email, String matricule, String motdepasse) {
+        User user = userRepository.findByEmailAndMatricule(email, matricule);
+        if (user != null && user.getMotdepasse().equals(motdepasse)) {
+            return user;
         }
-
-        System.out.println("Utilisateur trouvé : Matricule = " + user.getMatricule());
-        System.out.println("Mot de passe récupéré : " + user.getMotdepasse());
-        System.out.println("Rôle récupéré : " + user.getRole());
-
-        boolean isPasswordValid = user.getMotdepasse().equals(motdepasse);
-        boolean isRoleValid = user.getRole().equals(role);
-
-        System.out.println("Mot de passe valide : " + isPasswordValid);
-        System.out.println("Rôle valide : " + isRoleValid);
-
-        return isPasswordValid && isRoleValid;
+        return null;
     }
 }

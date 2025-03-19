@@ -1,5 +1,5 @@
 
-const InfoAlert = ({sms})=>{
+const InfoAlert = ({message})=>{
     return (
         <>
         <div className="flex flex-col h-screen flex-1 flex flex-col text-center items-center justify-center text-[#ccc] ">
@@ -7,7 +7,7 @@ const InfoAlert = ({sms})=>{
                 <div>
                 <h2>
                     {
-                        sms
+                        message
                     }
                 </h2>
                 </div>

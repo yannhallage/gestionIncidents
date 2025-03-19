@@ -1,0 +1,6 @@
+com\example\service_historique\model\Historique.class
+com\example\service_historique\repository\HistoriqueRepository.class
+com\example\service_historique\service\HistoriqueService.class
+com\example\service_historique\ServiceHistoriqueApplication.class
+com\example\service_historique\controller\HistoriqueController.class
+com\example\service_historique\config\CorsConfig.class

@@ -1,6 +1,10 @@
-
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import InfoAlert from "./infoAlert";
 const Notification = () => {
+    const [notifications, setNotifications] = useState([]);
+    const matricule = Cookies.get('matricule');
+
 
     const containerStyle = {
         display: 'flex',
@@ -18,7 +22,7 @@ const Notification = () => {
     const chatItemStyle = {
         display: 'flex',
         alignItems: 'center',
-        padding: '10px',
+        padding: '18px',
         borderBottom: '1px solid',
     };
 
@@ -58,16 +62,27 @@ const Notification = () => {
     };
 
     // Données des discussions (vous pouvez les récupérer depuis une API ou un état)
-    const chats = [
-        { name: 'Moko', message: 'Ouais 😄💰', time: '19:39', unread: 1 },
-        { name: 'Tyrrell', message: '😀🧘', time: '03/03/2025' },
-        { name: 'M.A ♥', message: 'Bon vou là je dois bosser là devoir demain ...', time: '22:10' },
-        // { name: 'Dion Inès', message: 'A réagi par ♥ : "Et à toi aussi"', time: '21:27' },
-        // { name: 'Hala Madrid', message: 'Appel vocal', time: '18:52' },
-        // { name: 'Yango Delivery', message: "Votre commande a été livrée Téléchargez l'app...", time: '18:44' },
-        // { name: 'Yango Delivery', message: "Votre commande a été livrée Téléchargez l'app...", time: '18:44' },
+    useEffect(() => {
+        if (!matricule) return;
 
-    ];
+        const fetchNotifications = async () => {
+            try {
+                const response = await fetch(`http://localhost:8081/api/notifications/${matricule}`, {
+                    credentials: 'include',
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setNotifications(data);
+                } else {
+                    console.error('Erreur HTTP:', response.status);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des notifications:', error);
+            }
+        };
+
+        fetchNotifications();
+    }, [matricule]);
     return (
         <>
             <div className="">
@@ -79,39 +94,29 @@ const Notification = () => {
                 </p>
                 <div className="mt-5">
                     <hr />
-                    <div className="flex flex-col bg-white flex-1 items-center justify-center ">
-                        <div style={chatListStyle}>
-                            {chats.map((chat, index) => (
-                                <div key={index} style={chatItemStyle}>
-                                    {/* <img src="https://via.placeholder.com/40" alt={chat.name} style={chatImageStyle} /> */}
-                                    <span className="text-[#ccc]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                                        </svg>
-
-                                    </span>
-
-                                    <div style={chatDetailsStyle} className='ml-2 mt-2'>
-                                        <div style={chatNameStyle} className='flex space-x-3'>
-                                            <span className="text-[14px]">
-                                                Panne reglée TicketD001
-                                            </span>
-                                            {/* <span  className='text-blue-700'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
-                                        </svg>
-
-                                    </span> */}
+                    <div className=" flex-col bg-white items-center justify-center ">
+                        {notifications.length === 0 ?(
+                            <p className="text-gray-400">Aucune notification disponible pour le moment.</p>
+                        ):(
+                            <div style={chatListStyle}  className={''}>
+                                {notifications.map((notif) => (
+                                    <div key={notif.id} style={chatItemStyle}>
+                                        <span className="text-[#ccc]">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                            </svg>
+                                        </span>
+                                        <div style={chatDetailsStyle}>
+                                            <div style={chatNameStyle} className='flex space-x-3'>
+                                                <span className="text-[14px]">Notification #{notif.id}</span>
+                                            </div>
+                                            <div style={chatMessageStyle}>{notif.message}</div>
                                         </div>
-                                        <div style={chatMessageStyle}>
-                                            Le problème provenait de problèmes de connectivité entre les services Actions et certains nœuds de l'un de nos clusters Redis
-                                        </div>
+                                        <div style={chatTimeStyle}>{new Date().toLocaleDateString()}</div>
                                     </div>
-                                    <div style={chatTimeStyle}>15/03/2025</div>
-                                    {/* {chat.unread && <div style={chatUnreadStyle}>{chat.unread}</div>} */}
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

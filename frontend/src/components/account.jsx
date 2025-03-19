@@ -1,4 +1,5 @@
 import ButtonClassic from "./buttonClassic";
+import {useNavigate} from "react-router-dom";
 
 const AccountComponent = () => {
     const searchBarStyle = {
@@ -47,6 +48,10 @@ const AccountComponent = () => {
                 text: "Vous etre deconnecter",
                 icon: "success"
               });
+
+                Cookies.remove('userRole');
+                Cookies.remove('matricule');
+                navigate('/');
             }
           });
     }

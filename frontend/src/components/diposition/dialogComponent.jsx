@@ -1,12 +1,11 @@
 import {extendedChats} from '../../api/apiDataFirste'
-
+import React, { useContext } from 'react';
+import { SecondContext } from '../../context/FirsContext';
 const DialogComponent = ({ donnee }) => {
+    const { historiqueData, setHistoriqueData } = useContext(SecondContext);
 
-    if (extendedChats){
-        console.log('api disponible ')
-    }
-    if (donnee) {
-        console.log("donnee existe " + donnee)
+    if (historiqueData){
+        console.log(historiqueData[donnee].matriculeUtilisateur)
     }
     return (
         <>
@@ -18,12 +17,12 @@ const DialogComponent = ({ donnee }) => {
                         </span>
                         <br /> <br />
                         <span className="text-xl font-bold">
-                            Reference ticket : {extendedChats[donnee-1].name}
+                            Reference ticket :
                         </span>
                     </div>
                     <div className="mt-11 text-xl">
                         <span>
-                            Certains utilisateurs d'Actions constatent  que leurs tâches de workflow ne démarrent pas.
+                            {historiqueData[donnee].message}
                         </span>
                     </div>
                     {/* description de l'utilisateur */}
@@ -45,10 +44,10 @@ const DialogComponent = ({ donnee }) => {
                     {/*  */}
                     <div className="mt-9 text-[15px]">
                         <span>
-                           date de creation ticket : 15/03/2024 <br />
-                           Statut : Resolu <br />
+                           date de creation ticket :  {historiqueData[donnee].dateCreation} <br />
+                           type de panne : {historiqueData[donnee].typePanne} <br />
                            panne resolu :  15/03/2024 <br />
-                           Assistance : IT0029
+                           Assistance : {historiqueData[donnee].matriculeTechnicien}
                         </span>
                     </div>
                 </div>

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.service_auth.ServiceAuthApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.16 s -- in com.example.service_auth.ServiceAuthApplicationTests

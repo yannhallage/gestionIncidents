@@ -44,7 +44,7 @@ const MenuLatera = () => {
                     <i className="fa-solid fa-clock-rotate-left"></i>
                 </div>
                 <div style={menuItemStyle}>
-                    <i class="fa-solid fa-bell"></i>
+                    <i className="fa-solid fa-bell"></i>
                 </div>
                 <div style={menuBottomStyle}>
                     <i className="fa-solid fa-circle-user"></i>

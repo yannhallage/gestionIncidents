@@ -1,49 +1,64 @@
 package com.example.service_auth.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "compte_utilisateur")
+@Table(name = "utilisateur")
 public class User {
-
     @Id
-    private Integer id; // Clé primaire : id
-
+    @Column(nullable = false, unique = true)
     private String matricule;
 
-    @Column(name = "nom_utilisateur")
-    private String nomUtilisateur;
+    @Column(nullable = false)
+    private String nom;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
     private String motdepasse;
 
-    private String role;
-
-    @Column(name = "date_creation")
-    private LocalDateTime dateCreation;
-
-    // Constructeur par défaut requis par JPA
-    public User() {}
+    @Column(nullable = false)
+    private String role; // admin, utilisateur, technicien
 
     // Getters et Setters
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public String getMatricule() {
+        return matricule;
+    }
 
-    public String getMatricule() { return matricule; }
-    public void setMatricule(String matricule) { this.matricule = matricule; }
+    public void setMatricule(String matricule) {
+        this.matricule = matricule;
+    }
 
-    public String getNomUtilisateur() { return nomUtilisateur; }
-    public void setNomUtilisateur(String nomUtilisateur) { this.nomUtilisateur = nomUtilisateur; }
+    public String getNom() {
+        return nom;
+    }
 
-    public String getMotdepasse() { return motdepasse; }
-    public void setMotdepasse(String motdepasse) { this.motdepasse = motdepasse; }
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getEmail() {
+        return email;
+    }
 
-    public LocalDateTime getDateCreation() { return dateCreation; }
-    public void setDateCreation(LocalDateTime dateCreation) { this.dateCreation = dateCreation; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMotdepasse() {
+        return motdepasse;
+    }
+
+    public void setMotdepasse(String motdepasse) {
+        this.motdepasse = motdepasse;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

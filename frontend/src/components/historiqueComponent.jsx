@@ -1,21 +1,19 @@
-
-// HistoriqueComponent.js
 import React, { useEffect, useState, useContext } from 'react';
 import InfoAlert from './infoAlert';
 import DialogComponent from './diposition/dialogComponent';
-import { chats } from '../api/apiDataFirste';
 import { SecondContext } from '../context/FirsContext';
-import '../styles/styles'
-
+import '../styles/styles';
+import Cookies from "js-cookie";
 
 const HistoriqueComponent = () => {
     const [apiC, setApiC] = useState(null);
-    const { ticket, setTicket } = useContext(SecondContext);
+    const matricule = Cookies.get('matricule');
+    const { ticket, setTicket, historiqueData, setHistoriqueData } = useContext(SecondContext); // Utilisation du contexte
 
     const chatListStyle = {
         flexGrow: 1,
-        overflowY: 'auto', // Défilement déjà présent
-        maxHeight: 'calc(100vh - 150px)', // Hauteur maximale pour limiter la section et activer le défilement
+        overflowY: 'auto',
+        maxHeight: 'calc(100vh - 150px)',
     };
 
     const chatItemStyle = {
@@ -23,13 +21,6 @@ const HistoriqueComponent = () => {
         alignItems: 'center',
         padding: '10px',
         borderBottom: '1px solid',
-    };
-
-    const chatImageStyle = {
-        width: '40px',
-        height: '40px',
-        borderRadius: '50%',
-        marginRight: '10px',
     };
 
     const chatDetailsStyle = {
@@ -52,26 +43,33 @@ const HistoriqueComponent = () => {
         marginLeft: '10px',
     };
 
-    const chatUnreadStyle = {
-        backgroundColor: '#075e54',
-        color: 'white',
-        padding: '2px 8px',
-        borderRadius: '50%',
-        fontSize: '12px',
-    };
+    useEffect(() => {
+        if (!matricule) {
+            console.error("Matricule non trouvé dans les cookies !");
+            return;
+        }
 
-    // Augmenter les données pour tester le défilement
-// Données des discussions (vous pouvez les récupérer depuis une API ou un état)
-const extendedChats = [
-    { name: 'Moko', message: 'Ouais 😄💰', time: '19:39', unread: 1 },
-    { name: 'Tyrrell', message: '😀🧘', time: '03/03/2025' },
-    { name: 'M.A ♥', message: 'Bon vou là je dois bosser là devoir demain ...', time: '22:10' },
-    { name: 'Dion Inès', message: 'A réagi par ♥ : "Et à toi aussi"', time: '21:27' },
-    // { name: 'Hala Madrid', message: 'Appel vocal', time: '18:52' },
-    // { name: 'Yango Delivery', message: "Votre commande a été livrée Téléchargez l'app...", time: '18:44' },
-    // { name: 'Yango Delivery', message: "Votre commande a été livrée Téléchargez l'app...", time: '18:44' },
+        const fetchHistoriqueData = async () => {
+            try {
+                const response = await fetch(`http://localhost:8082/api/historique/${matricule}`);
+                console.log("Statut de la réponse :", response.status);
 
-];
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(`Erreur HTTP: ${response.status} - ${text}`);
+                }
+
+                const data = await response.json();
+                console.log("Données reçues :", data);
+                setHistoriqueData(data); // Stocke dans le contexte
+            } catch (error) {
+                console.error('Erreur lors de la récupération des données :', error);
+                setHistoriqueData([]); // Stocke une liste vide en cas d'erreur
+            }
+        };
+
+        fetchHistoriqueData();
+    }, [matricule, setHistoriqueData]);
 
     useEffect(() => {
         if (apiC !== null) {
@@ -80,23 +78,25 @@ const extendedChats = [
     }, [apiC, setTicket]);
 
     return (
-        <>
-            <div className="">
-                <div className="mt-2 text-xl text-black font-bold">
-                    <h2>Historique</h2>
-                </div>
-                <p className="text-gray-400 text-[14px]">
-                    ique sint quia, neque debitis fugiat dolores id eligendi perspiciatis voluptatibus,
-                    deserunt ullam excepturi, vitae at reiciendis quibusdam cupiditate adipisci nostrum
-                    aliquid?
-                </p>
-                <div className="mt-5">
-                    <hr />
-                </div>
-                <div className="flex flex-col bg-white flex-1 items-center justify-center" >
-                    <div style={chatListStyle}>
-                        {extendedChats.map((chat, index) => (
-                            <div key={index} style={chatItemStyle}>
+        <div className="historique-container">
+            <div className="mt-2 text-xl text-black font-bold">
+                <h2>Historique</h2>
+            </div>
+            <p className="text-gray-400 text-[14px]">
+                ique sint quia, neque debitis fugiat dolores id eligendi perspiciatis voluptatibus,
+                deserunt ullam excepturi, vitae at reiciendis quibusdam cupiditate adipisci nostrum
+                aliquid?
+            </p>
+            <div className="mt-5">
+                <hr />
+            </div>
+            <div className="flex flex-col bg-white flex-1 items-center justify-center">
+                {historiqueData.length === 0 ? (
+                    <InfoAlert message={'Aucune historique à consulter.'} />
+                ) : (
+                    <div style={chatListStyle} >
+                        {historiqueData.map((chat, index) => (
+                            <div key={index} style={chatItemStyle} className='hover:bg-[#F5F7F8]'>
                                 <span className="text-[#ccc]">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -113,29 +113,24 @@ const extendedChats = [
                                         />
                                     </svg>
                                 </span>
-
                                 <div style={chatDetailsStyle} className="ml-2 mt-2">
                                     <div style={chatNameStyle} className="flex space-x-3">
                                         <span
                                             className="text-[14px] cursor-pointer"
-                                            onClick={() => {
-                                                setApiC(index + 1);
-                                            }}
+                                            onClick={() => setApiC(index)} // Correction : passe l'élément cliqué
                                         >
                                             TicketD00{index + 1}
                                         </span>
                                     </div>
-                                    <div style={chatMessageStyle}>
-                                        le ticket a été clôturé cela signifie que notre équipe IT a réglé votre panne
-                                    </div>
+                                    <div style={chatMessageStyle}>{chat.message}</div>
                                 </div>
-                                <div style={chatTimeStyle}>15/03/2025</div>
+                                <div style={chatTimeStyle}>{chat.dateCreation}</div>
                             </div>
                         ))}
                     </div>
-                </div>
+                )}
             </div>
-        </>
+        </div>
     );
 };
 

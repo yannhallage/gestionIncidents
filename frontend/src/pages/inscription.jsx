@@ -1,112 +1,103 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+ // Import ajouté explicitement
 
 const Inscription = () => {
     const navigate = useNavigate();
-    const emailRef = useRef(null);
     const matriculeRef = useRef(null);
     const passwordRef = useRef(null);
-    
-    const [email, setEmail] = useState("");
+
     const [matricule, setMatricule] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
     const handleClick = () => {
-        navigate('/');
+        navigate('/'); // Retour à la page d'accueil
     };
 
     const handleRegister = (e) => {
         e.preventDefault();
 
-        // Validation de l'email
-        if (!email.trim()) {
-            setError("Veuillez entrer votre email");
-            // alert("Erreur : L'email est requis");
-            emailRef.current.focus();
-            Swal.fire({
-                icon: "error",
-                title: "verifier les champs",
-                text: " L'email est requis",
-                footer: '<a href="#">Why do I have this issue?</a>'
-              });
-            return;
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            setError("Veuillez entrer un email valide");
-            // alert("Erreur : Format d'email invalide");
-            emailRef.current.focus();
-
-            Swal.fire({
-                icon: "error",
-                title: "verifier les champs",
-                text: "Format d'email invalide",
-                // icon: "success"
-                footer: '<a href="#">Why do I have this issue?</a>'
-              });
-            return;
-        }
-
         // Validation du matricule
         if (!matricule.trim()) {
             setError("Veuillez entrer votre matricule");
-            // alert("Erreur : Le matricule est requis");
+            matriculeRef.current.focus();
             Swal.fire({
                 icon: "error",
-                title: "verifier les champs",
-                text: " Le matricule est requis",
-                footer: '<a href="#">Why do I have this issue?</a>'
-              });
-            matriculeRef.current.focus();
+                title: "Vérifiez les champs",
+                text: "Le matricule est requis",
+                footer: '<a href="#">Pourquoi ce problème ?</a>'
+            });
             return;
         }
 
         // Validation du mot de passe
         if (!password.trim()) {
             setError("Veuillez entrer votre mot de passe");
-            // alert("Erreur : Le mot de passe est requis");
+            passwordRef.current.focus();
             Swal.fire({
                 icon: "error",
-                title: "verifier les champs",
-                text: " Le mot de passe est requis",
-                footer: '<a href="#">Why do I have this issue?</a>'
-              });
-            passwordRef.current.focus();
+                title: "Vérifiez les champs",
+                text: "Le mot de passe est requis",
+                footer: '<a href="#">Pourquoi ce problème ?</a>'
+            });
             return;
         }
 
         if (password.length < 6) {
             setError("Le mot de passe doit contenir au moins 6 caractères");
-            // alert("Erreur : Le mot de passe doit contenir au moins 6 caractères");
+            passwordRef.current.focus();
             Swal.fire({
                 icon: "error",
-                title: "verifier les champs",
-                text: " Le mot de passe doit contenir au moins 6 caractères",
-                footer: '<a href="#">Why do I have this issue?</a>'
-              });
-            passwordRef.current.focus();
+                title: "Vérifiez les champs",
+                text: "Le mot de passe doit contenir au moins 6 caractères",
+                footer: '<a href="#">Pourquoi ce problème ?</a>'
+            });
             return;
         }
 
-        // Si toutes les validations passent
+        // Envoi au backend
         setError("");
-        console.log("Inscription effectuée avec:", {
-            email: email,
+        const user = {
             matricule: matricule,
-            motDePasse: password
-        });
-        
-        // alert("Inscription réussie !");
-        // Ici vous pouvez ajouter la logique d'inscription réelle
-        // et la redirection appropriée après succès*
-        Swal.fire({
-            title: "Good job!",
-            text: "Inscription réussie !",
-            icon: "success"
-          });
-        // navigate('/login');
+            motdepasse: password
+        };
+
+        fetch('http://localhost:8081/api/register/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        try {
+                            const errorData = JSON.parse(text);
+                            throw new Error(errorData.message || "Erreur inconnue");
+                        } catch {
+                            throw new Error(`Erreur HTTP ${response.status}: ${text || "Aucune information supplémentaire"}`);
+                        }
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                Swal.fire({
+                    title: "Compte créé avec succès !",
+                    text: "Vous pouvez maintenant vous connecter.",
+                    icon: "success"
+                }).then(() => {
+                    navigate('/login');
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Erreur lors de l'inscription",
+                    text: error.message || "Une erreur est survenue",
+                    footer: '<a href="#">Pourquoi ce problème ?</a>'
+                });
+            });
     };
 
     return (
@@ -134,17 +125,6 @@ const Inscription = () => {
 
                 <div className="mb-6 relative space-y-2">
                     <label className="block text-sm text-gray-400 mb-1">
-                        Email
-                    </label>
-                    <input
-                        type="email"
-                        ref={emailRef}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Entrez votre e-mail"
-                        className="w-full max-w-md p-2 hover:border-blue-400 rounded-md border bg-gray-700 border-gray-600 text-white"
-                    />
-                    <label className="block text-sm text-gray-400 mb-1">
                         Matricule
                     </label>
                     <input
@@ -152,7 +132,7 @@ const Inscription = () => {
                         ref={matriculeRef}
                         value={matricule}
                         onChange={(e) => setMatricule(e.target.value)}
-                        placeholder="matricule"
+                        placeholder="Matricule"
                         className="w-full max-w-md p-2 hover:border-blue-400 rounded-md border bg-gray-700 border-gray-600 text-white"
                     />
                     <label className="block text-sm text-gray-400 mb-1">

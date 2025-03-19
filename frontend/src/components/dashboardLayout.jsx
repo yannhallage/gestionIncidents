@@ -15,6 +15,7 @@ const DashboardLayout = () => {
   const [secondvaleur, setSecondValeur] = useState(<MainContent />);
   const [activeItem, setActiveItem] = useState('home'); // État pour suivre l'item actif
   const [ticket, setTicket] = useState(secondvaleur); // État initial pour Ticket
+  const [historiqueData, setHistoriqueData] = useState([])
 
   const containerStyle = {
     display: 'flex',
@@ -27,7 +28,7 @@ const DashboardLayout = () => {
   const sidebarStyle = {
     width: '700px',
     // backgroundColor: '#E4EFE7',
-    padding: '10px',
+    padding: '3px',
     display: 'flex',
     flexDirection: 'column',
   };
@@ -94,7 +95,7 @@ const DashboardLayout = () => {
 
   return (
     <>
-      <SecondContext.Provider value={{ ticket, setTicket }}>
+      <SecondContext.Provider value={{ ticket, setTicket ,historiqueData, setHistoriqueData}}>
         <Context.Provider value={valeur}>
           <div style={containerStyle}>
             {/* Menu latéral à gauche */}

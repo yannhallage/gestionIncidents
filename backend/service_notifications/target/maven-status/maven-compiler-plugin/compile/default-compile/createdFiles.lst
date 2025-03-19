@@ -1,0 +1,6 @@
+com\example\service_notifications\model\Notification.class
+com\example\service_notifications\controller\NotificationController.class
+com\example\service_notifications\config\CorsConfig.class
+com\example\service_notifications\repository\NotificationRepository.class
+com\example\service_notifications\service\NotificationService.class
+com\example\service_notifications\ServiceNotificationsApplication.class

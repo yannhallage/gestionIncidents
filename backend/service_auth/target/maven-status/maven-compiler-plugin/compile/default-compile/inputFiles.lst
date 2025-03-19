@@ -1,9 +1,6 @@
-C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\config\WebConfig.java
+C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\config\SecurityConfig.java
 C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\controller\AuthController.java
-C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\dto\MessageResponse.java
-C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\dto\UserLoginRequest.java
 C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\model\User.java
 C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\repository\UserRepository.java
-C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\security\SecurityConfig.java
 C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\service\UserService.java
 C:\appjs\gestion-incidents\backend\service_auth\src\main\java\com\example\service_auth\ServiceAuthApplication.java
