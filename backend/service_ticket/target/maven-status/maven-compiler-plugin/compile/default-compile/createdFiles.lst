@@ -1,0 +1,7 @@
+com\example\service_ticket\controller\IncidentController.class
+com\example\service_ticket\service\IncidentService.class
+com\example\service_ticket\ServiceTicketApplication.class
+com\example\service_ticket\config\AppConfig.class
+com\example\service_ticket\config\CorsConfig.class
+com\example\service_ticket\model\Incident.class
+com\example\service_ticket\repository\IncidentRepository.class

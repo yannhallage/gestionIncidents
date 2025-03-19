@@ -55,22 +55,22 @@ const Sidebar = () => {
                     />
                 </div> */}
 
-                <div className="flex flex-col space-y-2 text-[13px] mt-7 flex-1 items-center justify-center">
-                    <div className='text-[20px] text-black'>
-                        <span>
-                            vue globale
-                        </span>
-                    </div>
-                    <div className="w-full  border border-[#ccc] bg-white rounded-lg overflow-hidden">
-                        {tickets.map((ticket, index) => (
-                            <div
-                                key={index}
-                                className="flex justify-between items-center px-4 py-2 border-b border-gray-200 last:border-b-0 hover:bg-gray-50"
-                            >
-                                <span className="font-semibold text-gray-800">{ticket.name}</span>
-                                <span className="text-gray-600">{ticket.count}</span>
-                            </div>
-                        ))}
+                <div className="flex flex-col md:p-7 overflow-y space-y-2 text-[13px] mt-7 flex-1 items-center justify-center">
+
+                    <div className="w-full  font-serif text-[14px] border border-none bg-white rounded-lg overflow-hidden">
+                        <div className="text-[18px] text-black  p-5">
+                            <span>
+                                vous avez effectuer <br/> une demande de panne
+                            </span>
+                            <span className={'float-end mt-2'}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 4.5 15 15m0 0V8.25m0 11.25H8.25" />
+                                </svg>
+                            </span>
+                            <span className={'text-[14px] ml-11'}>
+                                ticket:ouvert
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -18,6 +18,7 @@ public class NotificationService {
     }
 
     public Notification addNotification(Notification notification) {
+        System.out.println("Sauvegarde de la notification : " + notification);
         return notificationRepository.save(notification);
     }
 }

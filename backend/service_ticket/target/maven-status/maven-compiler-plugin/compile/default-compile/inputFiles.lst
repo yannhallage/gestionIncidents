@@ -1,0 +1,7 @@
+C:\appjs\gestion-incidents\backend\service_ticket\src\main\java\com\example\service_ticket\config\AppConfig.java
+C:\appjs\gestion-incidents\backend\service_ticket\src\main\java\com\example\service_ticket\config\CorsConfig.java
+C:\appjs\gestion-incidents\backend\service_ticket\src\main\java\com\example\service_ticket\controller\IncidentController.java
+C:\appjs\gestion-incidents\backend\service_ticket\src\main\java\com\example\service_ticket\model\Incident.java
+C:\appjs\gestion-incidents\backend\service_ticket\src\main\java\com\example\service_ticket\repository\IncidentRepository.java
+C:\appjs\gestion-incidents\backend\service_ticket\src\main\java\com\example\service_ticket\service\IncidentService.java
+C:\appjs\gestion-incidents\backend\service_ticket\src\main\java\com\example\service_ticket\ServiceTicketApplication.java

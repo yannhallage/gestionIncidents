@@ -8,14 +8,24 @@ import '../styles/personnal.css';
 import Sidebar from './diposition/sidebar';
 import MainContent from './diposition/mainContent';
 import { Context } from '../context/FirsContext';
-import { useState } from 'react';
+import { useState,useRef,useEffect  } from 'react';
 
 const DashboardLayout = () => {
+  const notifRef = useRef(null);
+  const [valeurNotif , setValeurNotif] = useState(null)
   const [valeur, setValeur] = useState(<Sidebar />);
   const [secondvaleur, setSecondValeur] = useState(<MainContent />);
   const [activeItem, setActiveItem] = useState('home'); // État pour suivre l'item actif
   const [ticket, setTicket] = useState(secondvaleur); // État initial pour Ticket
   const [historiqueData, setHistoriqueData] = useState([])
+
+  useEffect(() => {
+    if (notifRef.current) {
+      // Ajouter chaque classe individuellement
+      notifRef.current.classList.add('animate__animated');
+      notifRef.current.classList.add('animate__bounce');
+    }
+  }, [valeurNotif]);
 
   const containerStyle = {
     display: 'flex',
@@ -95,7 +105,7 @@ const DashboardLayout = () => {
 
   return (
     <>
-      <SecondContext.Provider value={{ ticket, setTicket ,historiqueData, setHistoriqueData}}>
+      <SecondContext.Provider value={{ ticket, setTicket ,historiqueData, setHistoriqueData,valeurNotif , setValeurNotif}}>
         <Context.Provider value={valeur}>
           <div style={containerStyle}>
             {/* Menu latéral à gauche */}
@@ -140,7 +150,7 @@ const DashboardLayout = () => {
                 style={activeItem === 'notification' ? activeMenuItemStyle : menuItemStyle}
                 onClick={HandlclickNotification}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" id="pic_notif" ref={notifRef} className="size-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                 </svg>
                 
